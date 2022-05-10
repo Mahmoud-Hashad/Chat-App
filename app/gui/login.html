@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Connection Init</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" href="css/login.css">
+<script type="text/javascript" src="/eel.js"></script>
+<script>
+
+  
+  function setConfigs(e) {
+   
+    var form = new FormData(document.getElementById("connection-form"));
+    var username = form.get("username");
+    var host = form.get("host");
+    var port = form.get("port");
+
+    x = eel.connect(username, host, port)
+   
+    window.location.href = "./main.html";
+
+    return false
+  }
+</script>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="login-form-wrap">
+  <h2>Connect</h2>
+  <form id="connection-form" onsubmit="event.preventDefault(); setConfigs();">
+    <p>
+    <input type="text" id="username" name="username" placeholder="Username" required><i class="validation"><span></span><span></span></i>
+    </p>
+
+    <p>
+    <input type="text" id="host" name="host" placeholder="Server IP" required><i class="validation"><span></span><span></span></i>
+    </p>
+
+    <p>
+    <input type="number" id="port" name="port" placeholder="Server Port" required><i class="validation"><span></span><span></span></i>
+    </p>
+    <!-- <p>
+    <input type="password" id="password" name="password" placeholder="password" required><i class="validation"><span></span><span></span></i>
+    </p> -->
+    <p>
+    <input type="submit" id="login" value="Connect">
+    </p>
+  </form>
+  <!--<div id="create-account-wrap">
+    <p>Not a member? <a href="./signup.html">Create Account</a><p>
+  </div><!--create-account-wrap-->
+</div><!--login-form-wrap-->
+<!-- partial -->
+  
+
+</body>
+</html>

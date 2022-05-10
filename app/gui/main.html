@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--  This file has been downloaded from bootdey.com @bootdey on twitter -->
+    <!--  All snippets are MIT license http://bootdey.com/license -->
+    <title>Chat Application</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+  <link rel="stylesheet" type="text/css" href="css/jquery.emojipicker.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="js/jquery.emojipicker.js"></script>
+
+  <!-- Emoji Data -->
+  <link rel="stylesheet" type="text/css" href="css/jquery.emojipicker.tw.css">
+  <script type="text/javascript" src="js/jquery.emojis.js"></script>
+
+
+  <link rel="stylesheet" href="css/style.css">
+  
+  <script type="text/javascript" src="eel.js"></script>
+  <script>
+
+    var colours = ['#345321', '#888888', '#000011', '#800000'];
+    function generateColour( name ){
+        // this is NOT a great hash but serves as an example
+        var sum = 0;
+        for (var i = 0; i < name.length; i++){
+            sum += name.charCodeAt(i);
+        }
+        return sum % colours.length;
+    }
+
+
+    eel.start()
+  
+
+    eel.expose(recive_message);
+    function recive_message(json_str) {
+      console.log(json_str)
+      data = JSON.parse(json_str);
+
+      username = data['name']
+      message = data['message']
+
+      if(!message || message == '') {
+        return
+      }
+      
+     
+      var today = new Date();
+
+      var time = today.getHours() + ":" + today.getMinutes();
+
+      body = `<div class="row message-body">
+        <div class="col-sm-12 message-main-receiver">
+          <div class="receiver">
+            <div class="message-text" style='color: ${colours[generateColour( username )]}'>
+              ${username}
+            </div>
+            <div class="message-text">
+              ${message}
+            </div>
+            <span class="message-time pull-right">
+              ${time}
+            </span>
+          </div>
+        </div>
+      </div>`
+
+      document.getElementById('conversation').insertAdjacentHTML( 'beforeend', body );
+    }
+
+    function sendMessage() {
+      message = document.getElementById('comment').value.trim()
+      document.getElementById('comment').value = ''
+
+      if(!message || message == '') {
+        return
+      }
+      
+
+      var today = new Date();
+
+      var time = today.getHours() + ":" + today.getMinutes();
+
+      body = `<div class="row message-body">
+        <div class="col-sm-12 message-main-sender">
+          <div class="sender">
+            <div class="message-text">
+              ${message}
+            </div>
+            <span class="message-time pull-right">
+              ${time}
+            </span>
+          </div>
+        </div>
+      </div>`;
+      
+
+      document.getElementById('conversation').insertAdjacentHTML( 'beforeend', body );
+      console.log('sending')
+      eel.send(message)
+      
+    }
+
+   
+    
+  eel.expose(set_name);
+  function set_name(name) {
+    document.getElementById('name').innerText = name;
+  }
+    
+
+  </script>
+
+
+</head>
+<body>
+
+<div class="container-fluid app">
+  <div class="row app-one">
+
+  
+
+    <div class="col-sm-12 conversation">
+    
+      <div class="row heading">
+        <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
+          <div class="heading-avatar-icon">
+            <img src="https://bootdey.com/img/Content/avatar/avatar6.png">
+          </div>
+        </div>
+        <div class="col-sm-8 col-xs-7 heading-name">
+          <a class="heading-name-meta" id='name'>John Doe
+          </a>
+          <span class="heading-online">Online</span>
+        </div>
+        <div class="col-sm-1 col-xs-1  heading-dot pull-right" style='opacity:0'>
+          <i class="fa fa-ellipsis-v fa-2x  pull-right" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <div class="row message" id="conversation">
+        <div class="row message-previous">
+          <div class="col-sm-12 previous">
+            
+            </a>
+          </div>
+        </div>
+
+        <div class="row message-body">
+          <div class="col-sm-12 message-main-receiver">
+            <div class="receiver">
+              <div class="message-text">
+               Chat Bot
+              </div>
+              <div class="message-text">
+               Welcome to the chat app
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row reply">
+        <!-- <div class="col-sm-1 col-xs-1 reply-emojis">
+          <i class="fa fa-smile-o fa-2x"></i>
+        </div> -->
+        <div class="col-sm-11 col-xs-11 reply-main">
+          <textarea class="form-control" rows="1" id="comment"></textarea>
+        </div>
+        <!-- <div class="col-sm-1 col-xs-1 reply-recording">
+          <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
+        </div> -->
+        <div class="col-sm-1 col-xs-1 reply-send" id='send'>
+          <i class="fa fa-send fa-2x" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+$(function(){
+    $(".heading-compose").click(function() {
+      $(".side-two").css({
+        "left": "0"
+      });
+    });
+
+    $(".newMessage-back").click(function() {
+      $(".side-two").css({
+        "left": "-100%"
+      });
+    });
+
+    $('#comment').emojiPicker({
+
+      position:'top',
+
+    });
+
+  document.getElementById("send").addEventListener ("click", sendMessage, false);
+
+})
+</script>
+</body>
+</html>
